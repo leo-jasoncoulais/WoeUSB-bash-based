@@ -19,8 +19,7 @@ if ! [[ -e $2 ]]; then
         exit
 fi
 
-regex="block special .*\\([0-9]+/0)"
-if ! [[ $(file $2) =~ $regex ]]; then
+if [[ $(lsblk -ndo TYPE $2) -ne "disk" ]]; then
         echo "Vous devez renseigner un disque entier."
         exit
 fi
