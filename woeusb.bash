@@ -40,7 +40,7 @@ if [[ $? -ne 0 ]]; then echo "$2 n'a pas pu être monté."; sudo umount /mnt/ins
 
 echo "Copie des fichiers..."
 cp -r /mnt/tmp-$1/* /mnt/windows-key >/dev/null 2>&1
-sudo wimsplit /mnt/install/tmp-$1/sources/install.wim /mnt/install/windows-key/sources/install.swm 4000 #>/dev/null 2>&1
+sudo wimsplit /mnt/install/tmp-$1/sources/install.wim /mnt/install/windows-key/sources/install.swm 4000
 if [[ $? -ne 0 ]]; then echo "Le fichier install.wim n'a pas pu être splitté."; sudo umount /mnt/install/*; exit; fi
 
 sudo umount /mnt/install/*
