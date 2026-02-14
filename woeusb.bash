@@ -44,8 +44,12 @@ mount -m "${2}1" /mnt/install/windows-key
 if [[ $? -ne 0 ]]; then echo "$2 n'a pas pu être monté."; umount /mnt/install/*; exit; fi
 
 echo "Copie des fichiers..."
-cp -r /mnt/install/tmp-$1/* /mnt/install/windows-key >/dev/null 2>&1
-wimsplit /mnt/install/tmp-$1/sources/install.wim /mnt/install/windows-key/sources/install.swm 4000
+
+cd /mnt/install/tmp-$1
+find . -type f ! -name "install.wim" -exec cp --parents {} /mnt/install/windows-key \; >/dev/null 2>&1
+cd - >/dev/null 2>&1
+
+wimsplit /mnt/install/tmp-$1/sources/install.wim /mnt/install/windows-key/sources/install.swm 3800
 if [[ $? -ne 0 ]]; then echo "Le fichier install.wim n'a pas pu être splitté."; umount /mnt/install/*; exit; fi
 
 umount /mnt/install/*
