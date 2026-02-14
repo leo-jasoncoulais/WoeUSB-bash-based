@@ -4,7 +4,7 @@ This Bash script automates the creation of a bootable Windows installation USB d
 
 ## ⚠️ Warning
 
-This script uses `sudo` and performs partition manipulation via `gdisk`. **All data on the target drive will be permanently erased.** Double-check your target device identifier before execution.
+This script performs partition manipulation via `gdisk`. **All data on the target drive will be permanently erased.** Double-check your target device identifier before execution.
 
 ## 🚀 Features
 
@@ -34,7 +34,7 @@ sudo ./woeusb.bash <windows_iso_path> <target_disk>
 If your Windows ISO is `windows.iso` and your USB drive is identified as `/dev/sdb`:
 
 ```bash
-./woeusb.bash windows.iso /dev/sdb
+sudo ./woeusb.bash windows.iso /dev/sdb
 ```
 
 ## 🔍 Technical Workflow
