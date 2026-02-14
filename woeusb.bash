@@ -24,7 +24,7 @@ sudo mount -m $1 /mnt/install/tmp-$1 >/dev/null 2>&1
 if [[ $? -ne 0 ]]; then echo "$1 n'a pas pu être monté."; exit; fi
 
 if ! [[ -e /mnt/install/tmp-$1/sources/install.wim ]]; then
-	echo "Le disque Windows fournit n'en est pas un. Pas de install.esd ou de install.wim trouvé."
+	echo "Le disque Windows fournit n'en est pas un. Pas de install.wim trouvé."
 	sudo umount /mnt/install/*
 	exit
 fi
