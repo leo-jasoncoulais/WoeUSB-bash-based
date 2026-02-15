@@ -4,7 +4,7 @@ This Bash script automates the creation of a bootable Windows installation USB d
 
 ## ⚠️ Warning
 
-This script performs partition manipulation via `gdisk`. **All data on the target drive will be permanently erased.** Double-check your target device identifier before execution.
+This script performs partition manipulation via `gdisk`. **All data on the target drive or partition will be permanently erased.** Double-check your target device identifier before execution.
 
 ## 🚀 Features
 
@@ -42,6 +42,6 @@ sudo ./woeusb.bash windows.iso /dev/sdb
 | Step | Action Taken |
 | --- | --- |
 | **Dependencies** | Installs `gdisk` and `wimlib-imagex`. |
-| **Safety Check** | Ensures the second argument is a raw disk (e.g., `/dev/sdb`) and not a partition (e.g., `/dev/sdb1`). |
+| **Safety Check** | The second argument can be a raw disk (e.g., `/dev/sdb`) or a partition (e.g., `/dev/sdb1`). |
 | **Partitioning** | Sets up a GPT table and creates an 8GB FAT32 partition. |
 | **Copying** | Uses `wimsplit` to segment the installer at 4GB intervals. |
