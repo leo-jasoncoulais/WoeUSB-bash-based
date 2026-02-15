@@ -19,10 +19,37 @@ if ! [[ -e $2 ]]; then
         exit
 fi
 
-if [[ $(lsblk -ndo TYPE $2) -ne "disk" ]]; then
-        echo "Vous devez renseigner un disque entier."
-        exit
+echo "Initialisation des disques..."
+
+if [[ $(lsblk -ndo TYPE $2) == "disk" ]]; then
+
+        echo -e "o\ny\nn\n1\n0G\n+8G\n0700\nw\ny" | gdisk $2 >/dev/null 2>&1
+        if [[ $? -ne 0 ]]; then echo "$2 n'a pas pu être créé correctement."; umount /mnt/install/*; exit; fi
+
+        partition="$21"
+
+else
+
+        disk_parent="/dev/$(lsblk -no pkname $2)"
+
+        if ! [[ $(fdisk -l $disk_parent) =~ gpt ]]; then
+                echo "La partition ciblée n'est pas sur un disque GPT."
+                exit
+        fi
+        if [[ $(lsblk -bndo SIZE $2) < 8589934592 ]]; then
+                echo "La partition ciblée n'est pas assez grande (minimum 8GiB)."
+                exit
+        fi
+
+        echo -e "t\n${2: -1:1}\n0700\nw\ny" | gdisk $disk_parent >/dev/null 2>&1
+        if [[ $? -ne 0 ]]; then echo "$2 n'a pas pu être typé en Microsoft Basic Data correctement."; umount /mnt/install/*; exit; fi
+
+        partition=$2
+
 fi
+
+mkfs.fat -F 32 $partition >/dev/null 2>&1
+if [[ $? -ne 0 ]]; then echo "$2 n'a pas pu être formaté en FAT32."; umount /mnt/install/*; exit; fi
 
 mount -m $1 /mnt/install/tmp-$1 >/dev/null 2>&1
 if [[ $? -ne 0 ]]; then echo "$1 n'a pas pu être monté."; exit; fi
@@ -33,14 +60,8 @@ if ! [[ -e /mnt/install/tmp-$1/sources/install.wim ]]; then
         exit
 fi
 
-echo -e "o\ny\nn\n1\n+0G\n+8G\n0700\nw\ny" | gdisk $2 >/dev/null 2>&1
-if [[ $? -ne 0 ]]; then echo "$2 n'a pas pu être créé correctement."; umount /mnt/install/*; exit; fi
-
-echo mkfs.fat -F 32 $2 >/dev/null 2>&1
-if [[ $? -ne 0 ]]; then echo "$2 n'a pas pu être formaté en FAT32."; umount /mnt/install/*; exit; fi
-
-mount -m "${2}1" /mnt/install/windows-key
-if [[ $? -ne 0 ]]; then echo "$2 n'a pas pu être monté."; umount /mnt/install/*; exit; fi
+mount -m $partition /mnt/install/windows-key
+if [[ $? -ne 0 ]]; then echo "$partition n'a pas pu être monté."; umount /mnt/install/*; exit; fi
 
 echo "Copie des fichiers..."
 
