@@ -6,20 +6,20 @@ This Bash script automates the creation of a bootable Windows installation USB d
 
 This script performs partition manipulation via `gdisk`. **All data on the target drive or partition will be permanently erased.** Double-check your target device identifier before execution.
 
-## 🚀 Features
+## Features
 
 * **Auto-Dependency Install**: Installs required tools (`gdisk`, `wimtools`, `util-linux`) via `apt`.
 * **Validation**: Checks if the source contains a valid Windows image (`install.wim` or `install.esd`).
 * **GPT Partitioning**: Automatically initializes the target drive with a GPT table.
 * **WIM Splitting**: Splits large `install.wim` files (over 4GB) into `.swm` chunks to ensure UEFI compatibility on FAT32 partitions.
 
-## 📋 Prerequisites
+## Prerequisites
 
 * A Debian/Ubuntu-based system (uses `apt` package manager).
 * **Root** privileges (sudo).
 * A mounted Windows ISO or an extracted Windows source folder.
 
-## 🛠️ Usage
+## Usage
 
 ### Syntax
 
@@ -37,7 +37,7 @@ If your Windows ISO is `windows.iso` and your USB drive is identified as `/dev/s
 sudo ./woeusb.bash windows.iso /dev/sdb
 ```
 
-## 🔍 Technical Workflow
+## Technical Workflow
 
 | Step | Action Taken |
 | --- | --- |
